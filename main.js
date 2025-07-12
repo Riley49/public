@@ -36,16 +36,22 @@ async function loadTailsAndTrack() {
         const match = jets.find(j => j[1] === tail.toUpperCase());
 
         let lat, lon, infoText;
-        if (match && match[6] && match[5]) {
-          lat = match[6];
-          lon = match[5];
-          nowKnown[tail] = { lat, lon, ts: Date.now() };
-          infoText = `Tail: ${tail}<br>Status: Live`;
-        } else if (lastKnown[tail]) {
-          lat = lastKnown[tail].lat;
-          lon = lastKnown[tail].lon;
-          infoText = `Tail: ${tail}<br>Status: Last known`;
-        }
+        let lat, lon, infoText;
+if (match) {
+  lat = match[6];
+  lon = match[5];
+
+  if (!lat || !lon) {
+    console.warn(`❗ ${tail} found, but missing lat/lon:`, match);
+    return;
+  }
+
+  infoText = `Tail: ${tail}<br>Status: Live`;
+} else if (lastKnown[tail]) {
+  lat = lastKnown[tail].lat;
+  lon = lastKnown[tail].lon;
+  infoText = `Tail: ${tail}<br>Status: Last known`;
+}
 
         if (lat && lon) {
           if (!markers[tail]) {
