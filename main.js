@@ -26,6 +26,7 @@ async function loadTailsAndTrack() {
       const res = await fetch('/api/states');
       const data = await res.json();
       const jets = data.states;
+      jets.slice(0, 20).forEach(jet => console.log("ACTIVE TAIL:", jet[1]));
       console.log("TAILS:", tails);
       console.log("OPEN SKY DATA:", jets.slice(0, 5));
 
